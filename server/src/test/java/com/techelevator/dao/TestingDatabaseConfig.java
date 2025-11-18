@@ -15,8 +15,7 @@ import java.util.Objects;
 
 @Configuration
 public class TestingDatabaseConfig {
-    // To use an existing PostgreSQL database, set the following environment variables.
-    // Otherwise, a temporary database will be created on the local machine.
+
     private static final String DB_HOST =
             Objects.requireNonNullElse(System.getenv("DB_HOST"), "localhost");
     private static final String DB_PORT =
@@ -26,12 +25,7 @@ public class TestingDatabaseConfig {
     private static final String DB_USERNAME =
             Objects.requireNonNullElse(System.getenv("DB_USERNAME"), "postgres");
     private static final String DB_PASSWORD =
-<<<<<<< HEAD
             Objects.requireNonNullElse(System.getenv("DB_PASSWORD"), "password1");
-=======
-            Objects.requireNonNullElse(System.getenv("DB_PASSWORD"), "postgres1");
->>>>>>> 96066255511e6580dfb7beb60aa08db4c52c2eaa
-
 
     private SingleConnectionDataSource adminDataSource;
     private JdbcTemplate adminJdbcTemplate;
@@ -42,11 +36,7 @@ public class TestingDatabaseConfig {
             adminDataSource = new SingleConnectionDataSource();
             adminDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
             adminDataSource.setUsername("postgres");
-<<<<<<< HEAD
             adminDataSource.setPassword("password1");
-=======
-            adminDataSource.setPassword("postgres1");
->>>>>>> 96066255511e6580dfb7beb60aa08db4c52c2eaa
             adminJdbcTemplate = new JdbcTemplate(adminDataSource);
             adminJdbcTemplate.update("DROP DATABASE IF EXISTS \"" + DB_NAME + "\";");
             adminJdbcTemplate.update("CREATE DATABASE \"" + DB_NAME + "\";");
@@ -57,13 +47,13 @@ public class TestingDatabaseConfig {
 
     @Bean
     public DataSource dataSource() throws SQLException {
-        if(ds != null) return ds;
+        if (ds != null) return ds;
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
         dataSource.setUrl(String.format("jdbc:postgresql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME));
         dataSource.setUsername(DB_USERNAME);
         dataSource.setPassword(DB_PASSWORD);
-        dataSource.setAutoCommit(false); //So we can rollback after each test.
+        dataSource.setAutoCommit(false);
 
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("test-schema.sql"));
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("test-data.sql"));

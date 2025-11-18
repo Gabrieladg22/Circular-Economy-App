@@ -97,7 +97,7 @@ public class JdbcBusinessDaoTest extends BaseDaoTest{
     }
 
     @Test
-    public void deleteBusinessById_deletes_timesheet() {
+    public void deleteBusinessById_deletes_business() {
 
         int rowsAffected = sut.deleteBusinessById(1);
         assertEquals(1, rowsAffected);
