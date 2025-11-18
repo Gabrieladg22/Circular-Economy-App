@@ -1,25 +1,26 @@
-# Use OpenJDK 17 as base image
-FROM openjdk:17-jdk-slim
+# Use official JDK 17 image
+FROM eclipse-temurin:17-jdk-jammy
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom files
+# Copy Maven wrapper and pom
 COPY mvnw .
-COPY pom.xml .
 COPY .mvn .mvn
+COPY pom.xml .
 
-# Download dependencies (cache)
+# Download dependencies
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
-# Copy all source code
+# Copy source code
 COPY src ./src
 
-# Build the Spring Boot app (skip tests for faster build)
-RUN ./mvnw clean package -DskipTests
+# Build the Spring Boot application
+RUN ./mvnw package -DskipTests
 
-# Expose port
-EXPOSE 9000
+# Expose the port Spring Boot runs on
+EXPOSE 8080
 
-# Run the Spring Boot app
-ENTRYPOINT ["java", "-jar", "target/circular-economy-app.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "target/*.jar"]
