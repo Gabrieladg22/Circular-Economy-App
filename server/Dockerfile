@@ -13,6 +13,8 @@ RUN mvn -B dependency:go-offline
 COPY src src
 RUN mvn -B package -DskipTests
 
-# Run the app
-CMD ["java", "-jar", "target/*.jar"]
+# Copy the built JAR to a fixed name
+RUN cp target/*.jar app.jar
 
+# Run the app
+CMD ["java", "-jar", "app.jar"]
