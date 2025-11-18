@@ -1,25 +1,18 @@
-# Use official JDK 17 image
 FROM eclipse-temurin:17-jdk-jammy
 
-# Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom
-COPY mvnw .
+# Install Maven
+RUN apt-get update && apt-get install -y maven
+
+# Copy pom and download dependencies
 COPY pom.xml .
+RUN mvn -B dependency:go-offline
 
-# Download dependencies
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
+# Copy source code and build
+COPY src src
+RUN mvn -B package -DskipTests
 
-# Copy source code
-COPY src ./src
+# Run the app
+CMD ["java", "-jar", "target/*.jar"]
 
-# Build the Spring Boot application
-RUN ./mvnw package -DskipTests
-
-# Expose the port Spring Boot runs on
-EXPOSE 8080
-
-# Run the application
-ENTRYPOINT ["java", "-jar", "target/*.jar"]
