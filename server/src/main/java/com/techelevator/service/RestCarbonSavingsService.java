@@ -23,7 +23,7 @@ public class RestCarbonSavingsService implements CarbonSavingsService{
     private final String BASE_URL = "https://www.carboninterface.com/api/v1/estimates";
     private RestClient restClient = RestClient.create(BASE_URL);
 
-    private static final String API_KEY = "jnOLgTUeD0LWC2tNJOOBw";
+    private static final String API_KEY = System.getenv("CARBON_API_KEY");
 
     @Override
     public CarbonSavingsApi getCarbonEmissions(String type, String country, String state, String electricityUnit,
